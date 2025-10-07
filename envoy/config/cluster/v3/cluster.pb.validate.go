@@ -1497,6 +1497,47 @@ func (m *Cluster) validate(all bool) error {
 			}
 		}
 
+	case *Cluster_LeastResponseTimeLbConfig_:
+		if v == nil {
+			err := ClusterValidationError{
+				field:  "LbConfig",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetLeastResponseTimeLbConfig()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ClusterValidationError{
+						field:  "LeastResponseTimeLbConfig",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ClusterValidationError{
+						field:  "LeastResponseTimeLbConfig",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetLeastResponseTimeLbConfig()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ClusterValidationError{
+					field:  "LeastResponseTimeLbConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	case *Cluster_RoundRobinLbConfig_:
 		if v == nil {
 			err := ClusterValidationError{
@@ -3162,6 +3203,184 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Cluster_LeastRequestLbConfigValidationError{}
+
+// Validate checks the field values on Cluster_LeastResponseTimeLbConfig with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *Cluster_LeastResponseTimeLbConfig) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Cluster_LeastResponseTimeLbConfig
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// Cluster_LeastResponseTimeLbConfigMultiError, or nil if none found.
+func (m *Cluster_LeastResponseTimeLbConfig) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Cluster_LeastResponseTimeLbConfig) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if wrapper := m.GetChoiceCount(); wrapper != nil {
+
+		if wrapper.GetValue() < 2 {
+			err := Cluster_LeastResponseTimeLbConfigValidationError{
+				field:  "ChoiceCount",
+				reason: "value must be greater than or equal to 2",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if all {
+		switch v := interface{}(m.GetActiveRequestBias()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Cluster_LeastResponseTimeLbConfigValidationError{
+					field:  "ActiveRequestBias",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Cluster_LeastResponseTimeLbConfigValidationError{
+					field:  "ActiveRequestBias",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetActiveRequestBias()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Cluster_LeastResponseTimeLbConfigValidationError{
+				field:  "ActiveRequestBias",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetSlowStartConfig()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, Cluster_LeastResponseTimeLbConfigValidationError{
+					field:  "SlowStartConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, Cluster_LeastResponseTimeLbConfigValidationError{
+					field:  "SlowStartConfig",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSlowStartConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Cluster_LeastResponseTimeLbConfigValidationError{
+				field:  "SlowStartConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return Cluster_LeastResponseTimeLbConfigMultiError(errors)
+	}
+
+	return nil
+}
+
+// Cluster_LeastResponseTimeLbConfigMultiError is an error wrapping multiple
+// validation errors returned by
+// Cluster_LeastResponseTimeLbConfig.ValidateAll() if the designated
+// constraints aren't met.
+type Cluster_LeastResponseTimeLbConfigMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m Cluster_LeastResponseTimeLbConfigMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m Cluster_LeastResponseTimeLbConfigMultiError) AllErrors() []error { return m }
+
+// Cluster_LeastResponseTimeLbConfigValidationError is the validation error
+// returned by Cluster_LeastResponseTimeLbConfig.Validate if the designated
+// constraints aren't met.
+type Cluster_LeastResponseTimeLbConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Cluster_LeastResponseTimeLbConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Cluster_LeastResponseTimeLbConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Cluster_LeastResponseTimeLbConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Cluster_LeastResponseTimeLbConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Cluster_LeastResponseTimeLbConfigValidationError) ErrorName() string {
+	return "Cluster_LeastResponseTimeLbConfigValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Cluster_LeastResponseTimeLbConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCluster_LeastResponseTimeLbConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Cluster_LeastResponseTimeLbConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Cluster_LeastResponseTimeLbConfigValidationError{}
 
 // Validate checks the field values on Cluster_RingHashLbConfig with the rules
 // defined in the proto definition for this message. If any rules are

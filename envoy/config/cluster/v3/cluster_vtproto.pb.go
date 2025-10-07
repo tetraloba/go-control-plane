@@ -638,6 +638,81 @@ func (m *Cluster_LeastRequestLbConfig) MarshalToSizedBufferVTStrict(dAtA []byte)
 	return len(dAtA) - i, nil
 }
 
+func (m *Cluster_LeastResponseTimeLbConfig) MarshalVTStrict() (dAtA []byte, err error) {
+	if m == nil {
+		return nil, nil
+	}
+	size := m.SizeVT()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBufferVTStrict(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Cluster_LeastResponseTimeLbConfig) MarshalToVTStrict(dAtA []byte) (int, error) {
+	size := m.SizeVT()
+	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
+}
+
+func (m *Cluster_LeastResponseTimeLbConfig) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+	if m == nil {
+		return 0, nil
+	}
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.unknownFields != nil {
+		i -= len(m.unknownFields)
+		copy(dAtA[i:], m.unknownFields)
+	}
+	if m.SlowStartConfig != nil {
+		size, err := m.SlowStartConfig.MarshalToSizedBufferVTStrict(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.ActiveRequestBias != nil {
+		if vtmsg, ok := interface{}(m.ActiveRequestBias).(interface {
+			MarshalToSizedBufferVTStrict([]byte) (int, error)
+		}); ok {
+			size, err := vtmsg.MarshalToSizedBufferVTStrict(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		} else {
+			encoded, err := proto.Marshal(m.ActiveRequestBias)
+			if err != nil {
+				return 0, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = protohelpers.EncodeVarint(dAtA, i, uint64(len(encoded)))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ChoiceCount != nil {
+		size, err := (*wrapperspb.UInt32Value)(m.ChoiceCount).MarshalToSizedBufferVTStrict(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *Cluster_RingHashLbConfig) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
@@ -1294,6 +1369,13 @@ func (m *Cluster) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
 	if m.unknownFields != nil {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
+	}
+	if msg, ok := m.LbConfig.(*Cluster_LeastResponseTimeLbConfig_); ok {
+		size, err := msg.MarshalToSizedBufferVTStrict(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
 	}
 	if m.DnsJitter != nil {
 		size, err := (*durationpb.Duration)(m.DnsJitter).MarshalToSizedBufferVTStrict(dAtA[:i])
@@ -2219,6 +2301,33 @@ func (m *Cluster_RoundRobinLbConfig_) MarshalToSizedBufferVTStrict(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *Cluster_LeastResponseTimeLbConfig_) MarshalToVTStrict(dAtA []byte) (int, error) {
+	size := m.SizeVT()
+	return m.MarshalToSizedBufferVTStrict(dAtA[:size])
+}
+
+func (m *Cluster_LeastResponseTimeLbConfig_) MarshalToSizedBufferVTStrict(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LeastResponseTimeLbConfig != nil {
+		size, err := m.LeastResponseTimeLbConfig.MarshalToSizedBufferVTStrict(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x41
+		i--
+		dAtA[i] = 0xc2
+	} else {
+		i = protohelpers.EncodeVarint(dAtA, i, 0)
+		i--
+		dAtA[i] = 0x41
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *LoadBalancingPolicy_Policy) MarshalVTStrict() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
@@ -2710,6 +2819,34 @@ func (m *Cluster_RoundRobinLbConfig) SizeVT() (n int) {
 }
 
 func (m *Cluster_LeastRequestLbConfig) SizeVT() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChoiceCount != nil {
+		l = (*wrapperspb.UInt32Value)(m.ChoiceCount).SizeVT()
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.ActiveRequestBias != nil {
+		if size, ok := interface{}(m.ActiveRequestBias).(interface {
+			SizeVT() int
+		}); ok {
+			l = size.SizeVT()
+		} else {
+			l = proto.Size(m.ActiveRequestBias)
+		}
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.SlowStartConfig != nil {
+		l = m.SlowStartConfig.SizeVT()
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	n += len(m.unknownFields)
+	return n
+}
+
+func (m *Cluster_LeastResponseTimeLbConfig) SizeVT() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3349,6 +3486,20 @@ func (m *Cluster_RoundRobinLbConfig_) SizeVT() (n int) {
 	_ = l
 	if m.RoundRobinLbConfig != nil {
 		l = m.RoundRobinLbConfig.SizeVT()
+		n += 2 + l + protohelpers.SizeOfVarint(uint64(l))
+	} else {
+		n += 3
+	}
+	return n
+}
+func (m *Cluster_LeastResponseTimeLbConfig_) SizeVT() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LeastResponseTimeLbConfig != nil {
+		l = m.LeastResponseTimeLbConfig.SizeVT()
 		n += 2 + l + protohelpers.SizeOfVarint(uint64(l))
 	} else {
 		n += 3
